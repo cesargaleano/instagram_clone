@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 
+
 export const Post = ({post}) => {
+  const [isVisibleComments, setIsVisibleComments] = useState(false); 
   return (
     <View style={styles.PostContainer}>
       <PostHeader post={post} />  
@@ -29,7 +31,15 @@ const PostImage =({post})=>(
 </View>
 );
 
-
+const PrintComments =({post})=>(
+   
+    post.comments.map((comment,index)=>(
+      <View key={index} style={{flexDirection:'row'}}>
+      <Text style ={{marginLeft:5, fontWeight:'900'}}>{comment.user+" "}</Text> 
+      <Text>{comment.comment}</Text>   
+      </View>))
+    
+);
 const PostFooter =({post})=>(
 <View>  
 <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:3}}>
@@ -54,15 +64,18 @@ const PostFooter =({post})=>(
 <Text style ={{marginLeft:5}}>{post.likes + ' likes'}</Text>
 </View>
 
-{post.comments.map((comment,index)=>(
-  <View key={index} style={{flexDirection:'row'}}>
-  <Text style ={{marginLeft:5, fontWeight:'900'}}>{comment.user+" "}</Text> 
-  <Text>{comment.comment}</Text>   
-  </View>
+<View style={{flexDirection:'row'}}>
+  <Text style={{marginLeft:5, fontWeight:'900'}}>{post.user + " "} </Text>
+  <Text>{post.caption}</Text>
   
-))}
+</View>
 
+{post.comments.length>1? <TouchableOpacity><Text>View All {post.comments.length} Comments</Text></TouchableOpacity>
+:<TouchableOpacity ><Text>View Comment</Text></TouchableOpacity>}
 
+{
+<PrintComments post={post} />
+}
 </View>
 );
 
